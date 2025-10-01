@@ -19,12 +19,86 @@ import com.university.bookstore.model.VideoMaterial;
  * - Magazines: $2 flat rate</p>
  * 
  */
-public class ShippingCostCalculator implements MaterialVisitor {
+
+
+ public class ShippingCostCalculator implements MaterialVisitor {
     
+    //physical items 0.50 euros per 100g
+    //digital items 0 euros (instant download)
+    //magazines 2 euros bought rate
+
     private static final double PHYSICAL_ITEM_RATE = 0.50; // per 100g
     private static final double MAGAZINE_FLAT_RATE = 2.00;
     private static final double DIGITAL_ITEM_RATE = 0.00;
     
     private double totalShippingCost = 0.0;
+
+    @Override
+    public void visit(PrintedBook book) {
+        double weightHundredGrams = 5.0;
+        double cost = weightHundredGrams * PHYSICAL_ITEM_RATE;
+        totalShippingCost += cost;
+    }
+
+    @Override
+    public void visit(Magazine magazine) {
+        totalShippingCost += MAGAZINE_FLAT_RATE;
+    }
+
+    @Override
+    public void visit(AudioBook audioBook) {
+        if (audioBook.getQuality() == Media.MediaQuality.PHYSICAL) {
+            double weightHundredGrams = 1.0;
+            double cost = weightHundredGrams * PHYSICAL_ITEM_RATE;
+            totalShippingCost += cost;
+        }
+        else {
+            totalShippingCost += DIGITAL_ITEM_RATE;
+        }
+    }
+
+    @Override
+    public void visit(VideoMaterial video) {
+        if (video.getQuality() == Media.MediaQuality.PHYSICAL) {
+            double weightHundredGrams = 1.5;
+            double cost = weightHundredGrams * PHYSICAL_ITEM_RATE;
+            totalShippingCost += cost;
+        }
+        else {
+            totalShippingCost += DIGITAL_ITEM_RATE;
+        }
+    }
+
+    @Override
+    public void visit(EBook ebook) {
+        totalShippingCost += DIGITAL_ITEM_RATE;
+    }
+
+    public double getShippingCost() {
+        return totalShippingCost;
+    }
+
+    public void reset() {
+        totalShippingCost = 0.0;
+    }
+
+    public double calcualteShippingCost(Material material) {
+        reset();
+
+        if (material instanceof PrintedBook) {
+            visit((PrintedBook) material);
+        } else if (material instanceof Magazine) {
+            visit((Magazine) material);
+        } else if (material instanceof AudioBook) {
+            visit((AudioBook) material);
+        } else if (material instanceof VideoMaterial) {
+            visit((VideoMaterial) material);
+        } else if (material instanceof EBook) {
+            visit((EBook) material);
+        } else {
+            throw new IllegalArgumentException("Unknown material types: " + material.getClass().getSimpleName());
+        }
+        return totalShippingCost;
+    }
 
 }

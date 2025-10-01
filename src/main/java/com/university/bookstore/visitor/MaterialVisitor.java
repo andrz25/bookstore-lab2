@@ -14,10 +14,25 @@ import com.university.bookstore.model.VideoMaterial;
  * <p>This pattern is particularly useful for operations that need
  * to behave differently based on the concrete type of Material.</p>
  * 
- * @author Navid Mohaghegh
- * @version 2.0
- * @since 2024-09-15
+ * @author Jayna Ong and Nina Zhang
+ * @version 1.0
+ * @since 2025-10-01
  */
 public interface MaterialVisitor {
+
+    //visits a printed book
+    void visit(PrintedBook book);
+
+    //visits a magazine
+    void visit(Magazine magazine);
+
+    //visits an audio book
+    void visit(AudioBook audioBook);
+
+    //visits a video
+    void visit(VideoMaterial video);
+
+    //visits an ebook
+    void visit(EBook ebook);
  
 }

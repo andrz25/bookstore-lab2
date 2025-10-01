@@ -5,119 +5,106 @@ import java.util.List;
 import com.university.bookstore.model.Book;
 
 /**
- * Defines the contract for bookstore operations.
+ * <p>This interface provides the basic methods to operate a bookstore.</p>
  * 
- * <p>This interface provides a API for managing a book inventory,
- * including CRUD operations, search functionality, and analytics.</p>
+ * <p>Includes CRUD, search, analytic, and export operations</p>
  * 
- * <p>Implementations should ensure thread-safety if concurrent access is expected.</p>
- * 
- * @author Navid Mohaghegh
+ * @author Jayna Ong and Nina Zhang
  * @version 1.0
- * @since 2024-09-15
+ * @since 2025-09-21
  */
+
 public interface BookstoreAPI {
-    
+    //CRUD Operations
+
     /**
-     * Adds a book to the inventory.
-     * Duplicate ISBNs are not allowed.
-     * 
-     * @param book the book to add (non-null)
-     * @return true if the book was added, false if ISBN already exists or book is null
+     * Adds a book object into the inventory
+     * @param book the book that will be added
+     * @return true if the book is added, false if the ISBN exists or the book is null
      */
-    boolean add(Book book);
-    
+    boolean add(Book book); 
+
     /**
-     * Removes a book from the inventory by ISBN.
-     * 
-     * @param isbn the ISBN of the book to remove
-     * @return true if a book was removed, false if no book with that ISBN exists
+     * Removes a book with the given ISBN 
+     * @param isbn the ISBN to remove
+     * @return true if the book was removed, false if the ISBN doesn't exist or ISBN is null
      */
-    boolean removeByIsbn(String isbn);
-    
+    boolean removeByIsbn(String isbn); 
+
     /**
-     * Finds a book by its ISBN.
-     * 
+     * Finds and returns a book with the given ISBN
      * @param isbn the ISBN to search for
-     * @return the book if found, null otherwise
+     * @return the book with the ISBN, null otherwise
      */
-    Book findByIsbn(String isbn);
-    
+    Book findByIsbn(String isbn); 
+
+    //Search Operations
     /**
-     * Searches for books by title (case-insensitive, partial match).
-     * 
-     * @param titleQuery the title or partial title to search for
-     * @return list of matching books (never null, may be empty)
+     * Finds books based on the title(case-insensitive, partial match)
+     * @param title the title or partial title to search for
+     * @return a list of books containing the title name(may be empty)
      */
-    List<Book> findByTitle(String titleQuery);
-    
+    List<Book> findByTitle(String title); 
+
     /**
-     * Searches for books by author (case-insensitive, partial match).
-     * 
-     * @param authorQuery the author name or partial name to search for
-     * @return list of matching books (never null, may be empty)
+     * Finds books with the same author(case-insensitive, partial match)
+     * @param author the author's name or partial name to search for
+     * @return a list of books with author's name(may be empty)
      */
-    List<Book> findByAuthor(String authorQuery);
-    
+    List<Book> findByAuthor(String author); 
+
     /**
-     * Finds all books within a price range (inclusive).
-     * 
-     * @param minPrice minimum price (inclusive)
-     * @param maxPrice maximum price (inclusive)
-     * @return list of books within the price range
-     * @throws IllegalArgumentException if minPrice > maxPrice or prices are negative
+     * Finds all books within a specific price range
+     * @param lowValue the minimum value to search for
+     * @param highValue the maximum value to search for
+     * @return a list of books within the price range(may be empty)
      */
-    List<Book> findByPriceRange(double minPrice, double maxPrice);
-    
+    List<Book> findByPriceRange(double lowValue, double highValue); 
+
     /**
-     * Finds all books published in a specific year.
-     * 
-     * @param year the publication year
-     * @return list of books published in that year
+     * Finds all books published within a specific year
+     * @param year the year that the books were published
+     * @return a list of books all published within the same year
      */
-    List<Book> findByYear(int year);
-    
+    List<Book> findByYear(int year); 
+
+    //Analytics Operations
+
     /**
-     * Gets the number of books in the inventory.
-     * 
-     * @return the total number of books
-     */
-    int size();
-    
+     * Gets total number of books in inventory
+     * @return The total number of books
+     * */
+    int size(); 
+
     /**
-     * Calculates the total value of all books in inventory.
-     * 
-     * @return sum of all book prices
-     */
-    double inventoryValue();
-    
+     * Gets total price of all books in inventory
+     * @return The sum of all book prices
+     * */
+    double inventoryValue(); 
+
     /**
-     * Finds the most expensive book in the inventory.
-     * 
-     * @return the book with highest price, null if inventory is empty
-     */
-    Book getMostExpensive();
-    
+     * Gets most expensive book in inventory
+     * @return The most expensive book
+     * */
+    Book getMostExpensive(); 
+
     /**
-     * Finds the most recently published book.
-     * 
-     * @return the book with the latest publication year, null if inventory is empty
-     */
-    Book getMostRecent();
-    
+     * Gets most recent book in inventory
+     * @return The most recent book
+     * */
+    Book getMostRecent(); 
+
+    //Export Operations
+
     /**
-     * Creates a defensive copy of the inventory as an array.
-     * Changes to the returned array will not affect the inventory.
-     * 
-     * @return array containing all books in the inventory
-     */
-    Book[] snapshotArray();
-    
+     * Creates defensive copy of inventory into an array
+     * @return The copy of all books in the inventory in array form
+     * */
+    Book[] snapshotArray(); 
+
     /**
-     * Gets all books in the inventory.
-     * The returned list is a defensive copy.
-     * 
-     * @return list of all books (never null, may be empty)
+     * Creates defensive copy of inventory into another list
+     * @return The copy of all books in the inventory in a list form
      */
-    List<Book> getAllBooks();
+    List<Book> getAllBooks(); 
 }

@@ -1,186 +1,216 @@
 package com.university.bookstore.model;
 
-import java.time.Year;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
- * Represents an immutable book in the bookstore inventory.
- * Books are uniquely identified by their ISBN.
- * 
- * <p>This class is immutable and thread-safe. All fields are validated
- * during construction to ensure data integrity.</p>
- * 
- * @author Navid Mohaghegh
- * @version 1.0
- * @since 2024-09-15
+ * Represents an immutable book with an ISBN, title, author, price, and year of publication.
+ * <p>
+ * This class validates all fields during construction:
+ * <ul>
+ *   <li>ISBN must be either 10 or 13 digits (numeric only, no hyphens or spaces).</li>
+ *   <li>Title and author must be non-null, non-blank strings.</li>
+ *   <li>Price must be non-negative (zero allowed).</li>
+ *   <li>Year must be between 1450 and the current year + 1.</li>
+ * </ul>
  */
+
 public final class Book implements Comparable<Book> {
-    
-    private static final Pattern ISBN_13_PATTERN = Pattern.compile("^\\d{13}$");
-    private static final Pattern ISBN_10_PATTERN = Pattern.compile("^\\d{9}[\\dX]$");
-    private static final int MIN_YEAR = 1450; // Invention of printing press
-    
-    private final String isbn;
-    private final String title;
-    private final String author;
-    private final double price;
-    private final int year;
-    
-    /**
-     * Creates a new Book with validation.
-     * 
-     * @param isbn the International Standard Book Number (10 or 13 digits)
-     * @param title the book title (non-null, non-blank)
-     * @param author the primary author (non-null, non-blank)
-     * @param price the price in dollars (non-negative)
-     * @param year the publication year (1450 to current year + 1)
-     * @throws IllegalArgumentException if any parameter is invalid
-     * @throws NullPointerException if any string parameter is null
+  private final String isbn;
+  private final String title;
+  private final String author;
+  private final double price;
+  private final int year;
+
+  /**
+   * Constructs a new book instance with the given properties for validation.
+   *
+   * @param isbn   the ISBN of the book (must be 10 or 13 digits, numeric only)
+   * @param title  the title of the book (non-null, non-blank)
+   * @param author the author of the book (non-null, non-blank)
+   * @param price  the price of the book (must be ≥ 0.0)
+   * @param year   the publication year (1450 ≤ year ≤ current year + 1)
+   * @throws NullPointerException     if any parameter is null
+   * @throws IllegalArgumentException if any of the arguments fail validation
+   */
+
+  public Book(String isbn, String title, String author, double price, int year) {
+    this.isbn = validateIsbn(isbn);
+    this.title = validateString(title, "Title");
+    this.author = validateString(author, "Author");
+    this.price = validatePrice(price);
+    this.year = validateYear(year);
+  }
+
+  // Validators
+  private String validateIsbn(String isbn) {
+
+    if (isbn == null) {
+      throw new NullPointerException("ISBN cannot be null");
+    }
+    if (isbn.isEmpty()) {
+      throw new IllegalArgumentException("ISBN: cannot be empty");
+    }
+    if (isbn.length() != 13 && isbn.length() != 10) {
+      throw new IllegalArgumentException("ISBN: " + isbn + " must be 10 or 13 digits in length");
+    }
+
+    for (char c : isbn.toCharArray()) {
+      if (!Character.isDigit(c)) {
+        throw new IllegalArgumentException("ISBN: " + isbn + " must only contain digits");
+      }
+    }
+
+    return isbn;
+  }
+
+  private String validateString(String string, String fieldName) {
+    /*
+     * Title and Author Validation:
+     * – Must be non-null and non-blank
+     * – Should contain meaningful text (not just spaces)
+     * – Consider trimming whitespace from input
      */
-    public Book(String isbn, String title, String author, double price, int year) {
-        this.isbn = validateIsbn(isbn);
-        this.title = validateStringField(title, "Title");
-        this.author = validateStringField(author, "Author");
-        this.price = validatePrice(price);
-        this.year = validateYear(year);
+
+    if (string == null) {
+      throw new NullPointerException(fieldName + " cannot be null");
     }
-    
-    private String validateIsbn(String isbn) {
-        if (isbn == null) {
-            throw new NullPointerException("ISBN cannot be null");
-        }
-        
-        String cleaned = isbn.replaceAll("-", "").trim();
-        
-        if (!ISBN_10_PATTERN.matcher(cleaned).matches() && 
-            !ISBN_13_PATTERN.matcher(cleaned).matches()) {
-            throw new IllegalArgumentException(
-                "ISBN must be 10 or 13 digits. Provided: " + isbn);
-        }
-        
-        return cleaned;
+    if (string.trim().isEmpty()) {
+      throw new IllegalArgumentException(fieldName + ": " + string + " cannot be  empty");
     }
-    
-    private String validateStringField(String value, String fieldName) {
-        if (value == null) {
-            throw new NullPointerException(fieldName + " cannot be null");
-        }
-        if (value.trim().isEmpty()) {
-            throw new IllegalArgumentException(fieldName + " cannot be blank");
-        }
-        return value.trim();
+
+    return string.trim();
+  }
+
+  private double validatePrice(double price) {
+    /*
+     * Price Validation:
+     * – Must be non-negative (> 0.0)
+     * – 0.0 is allowed for free books, promotional items, etc.
+     * – Consider using BigDecimal for precise monetary calculations in production
+     */
+
+    if (!(price >= 0.0)) {
+      throw new IllegalArgumentException("Price: " + price + " cannot be negative ");
     }
-    
-    private double validatePrice(double price) {
-        if (price < 0.0) {
-            throw new IllegalArgumentException(
-                "Price cannot be negative. Provided: " + price);
-        }
-        if (Double.isNaN(price) || Double.isInfinite(price)) {
-            throw new IllegalArgumentException(
-                "Price must be a valid number. Provided: " + price);
-        }
-        return price;
+
+    return price;
+  }
+
+  private int validateYear(int year) {
+    /*
+     * Year Validation:
+     * – Must be between 1450 (invention of printing press) and current year + 1
+     * – Current year + 1 allows for pre-orders of upcoming books
+     * – Prevents obviously invalid dates like year 3000 or year 1000
+     */
+    if (year < 1450 || year > 2026) {
+      throw new IllegalArgumentException("Year: " + year + " must be between 1450 and 2026");
     }
-    
-    private int validateYear(int year) {
-        int currentYear = Year.now().getValue();
-        if (year < MIN_YEAR || year > currentYear + 1) {
-            throw new IllegalArgumentException(
-                String.format("Year must be between %d and %d. Provided: %d",
-                    MIN_YEAR, currentYear + 1, year));
-        }
+
+    return year;
+  }
+
+  // Getters
+
+  /**
+   * Returns the ISBN of the book.
+   *
+   * @return the ISBN
+  */
+  public String getIsbn() {
+    return isbn;
+  }
+
+  /**
+   * Returns the title of this book.
+   *
+   * @return the title
+  */
+  public String getTitle() {
+    return title;
+  }
+
+  /**
+   * Returns the author of this book.
+   *
+   * @return the author
+  */
+  public String getAuthor() {
+    return author;
+  }
+
+  /**
+   * Returns the year of this book.
+   *
+   * @return the year
+  */ 
+  public int getYear() {
         return year;
     }
-    
-    /**
-     * Gets the ISBN of this book.
-     * @return the ISBN (10 or 13 digits)
-     */
-    public String getIsbn() {
-        return isbn;
+
+  /**
+   * Returns the price of this book in dollars.
+   *
+   * @return the price
+  */
+  public Double getPrice() {
+    return price;
+  }
+
+  // Methods
+
+  /**
+   * Indicates whether some other object is equal to this one.
+   * Two book objects are considered equal if they have the same ISBN.
+   *
+   * @param obj the object to compare with
+   * @return {@code true} if this book and {@code obj} have the same ISBN, otherwise {@code false}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (!(obj instanceof Book))
+      return false;
+
+    Book other = (Book) obj;
+
+    return Objects.equals(isbn, other.isbn);
+  }
+
+  /**
+   * Returns the hash code value for this book.
+   *
+   * @return the hash code
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hash(isbn);
+  }
+  
+  /**
+   * Compares this book to another by title (case-insensitive).
+   *
+   * @param book other book to compare with
+   * @return true if books have the same title, otherwise returns false
+   * @throws NullPointerException if {@code book} is null
+   */
+  @Override
+  public int compareTo(Book book) {
+    if (book == null) {
+      throw new NullPointerException("Cannot compare, book is null");
     }
-    
-    /**
-     * Gets the title of this book.
-     * @return the book title
-     */
-    public String getTitle() {
-        return title;
-    }
-    
-    /**
-     * Gets the author of this book.
-     * @return the author name
-     */
-    public String getAuthor() {
-        return author;
-    }
-    
-    /**
-     * Gets the price of this book.
-     * @return the price in dollars
-     */
-    public double getPrice() {
-        return price;
-    }
-    
-    /**
-     * Gets the publication year of this book.
-     * @return the publication year
-     */
-    public int getYear() {
-        return year;
-    }
-    
-    /**
-     * Compares this book with another book based on title (alphabetical order).
-     * 
-     * @param other the book to compare with
-     * @return negative if this book comes before, positive if after, 0 if equal
-     */
-    @Override
-    public int compareTo(Book other) {
-        if (other == null) {
-            throw new NullPointerException("Cannot compare to null Book");
-        }
-        return this.title.compareToIgnoreCase(other.title);
-    }
-    
-    /**
-     * Checks if this book is equal to another object.
-     * Books are considered equal if they have the same ISBN.
-     * 
-     * @param obj the object to compare with
-     * @return true if the objects are equal (same ISBN), false otherwise
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Book)) return false;
-        Book other = (Book) obj;
-        return isbn.equals(other.isbn);
-    }
-    
-    /**
-     * Generates hash code based on ISBN.
-     * 
-     * @return hash code of the ISBN
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(isbn);
-    }
-    
-    /**
-     * Returns a human-readable string representation of this book.
-     * 
-     * @return formatted string with book details
-     */
-    @Override
-    public String toString() {
-        return String.format("Book[ISBN=%s, Title='%s', Author='%s', Price=$%.2f, Year=%d]",
-            isbn, title, author, price, year);
-    }
+    return title.compareToIgnoreCase(book.title);
+  }
+
+  /**
+   * Returns a readable string representation of this book.
+   * 
+   * @return formatted string with book details
+   */
+  @Override
+  public String toString() {
+    return String.format("Book[ISBN=%s, Title='%s', Author='%s', Price=$%.2f, Year=%d]",
+        isbn, title, author, price, year);
+  }
 }

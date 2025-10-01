@@ -19,39 +19,5 @@ import com.university.bookstore.model.VideoMaterial;
  * @since 2024-09-15
  */
 public interface MaterialVisitor {
-    
-    /**
-     * Visits a PrintedBook.
-     * 
-     * @param book the printed book to visit
-     */
-    void visit(PrintedBook book);
-    
-    /**
-     * Visits a Magazine.
-     * 
-     * @param magazine the magazine to visit
-     */
-    void visit(Magazine magazine);
-    
-    /**
-     * Visits an AudioBook.
-     * 
-     * @param audioBook the audio book to visit
-     */
-    void visit(AudioBook audioBook);
-    
-    /**
-     * Visits a VideoMaterial.
-     * 
-     * @param video the video material to visit
-     */
-    void visit(VideoMaterial video);
-    
-    /**
-     * Visits an EBook.
-     * 
-     * @param ebook the e-book to visit
-     */
-    void visit(EBook ebook);
+ 
 }

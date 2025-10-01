@@ -3,7 +3,6 @@ package com.university.bookstore.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -19,266 +18,210 @@ import com.university.bookstore.model.Book;
  * 
  * <p>All methods handle null arrays and null elements gracefully.</p>
  * 
- * @author Navid Mohaghegh
- * @version 1.0
- * @since 2024-09-15
  */
 public final class BookArrayUtils {
-    
-    /**
-     * Private constructor to prevent instantiation.
-     */
+
+    // Prevents instantiation
     private BookArrayUtils() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
-    
-    /**
-     * Counts books published before a given year.
-     * 
-     * @param books array of books (may be null or contain nulls)
-     * @param yearCutoff the cutoff year (exclusive)
-     * @return count of books published before the cutoff year
-     */
-    public static int countBeforeYear(Book[] books, int yearCutoff) {
+
+    // Counting Operations
+    public static int countBeforeYear(Book[] books, int year) {
         if (books == null) {
             return 0;
         }
-        
+
         int count = 0;
+
         for (Book book : books) {
-            if (book != null && book.getYear() < yearCutoff) {
+            if (book != null && book.getYear() < year) {
                 count++;
             }
         }
+
         return count;
     }
-    
-    /**
-     * Counts books by a specific author (case-insensitive, exact match).
-     * 
-     * @param books array of books (may be null or contain nulls)
-     * @param author the author name to search for
-     * @return count of books by the specified author
-     */
+
     public static int countByAuthor(Book[] books, String author) {
         if (books == null || author == null) {
             return 0;
         }
-        
+
         int count = 0;
+
         for (Book book : books) {
-            if (book != null && book.getAuthor().equalsIgnoreCase(author)) {
+            if (book.getAuthor() != null && book.getAuthor().equalsIgnoreCase(author)) {
                 count++;
             }
         }
+
         return count;
     }
-    
-    /**
-     * Filters books with price at most the specified maximum.
-     * Returns a compact array (no nulls, exact size).
-     * 
-     * @param books array of books (may be null or contain nulls)
-     * @param maxPrice maximum price (inclusive)
-     * @return compact array of books with price less than or equal to maxPrice
-     * @throws IllegalArgumentException if maxPrice is negative
-     */
+
+    // Filtering Operations
     public static Book[] filterPriceAtMost(Book[] books, double maxPrice) {
         if (maxPrice < 0) {
             throw new IllegalArgumentException("Max price cannot be negative");
         }
-        
+
         if (books == null) {
             return new Book[0];
         }
-        
-        // Count matching books
+
         int count = 0;
+
         for (Book book : books) {
             if (book != null && book.getPrice() <= maxPrice) {
                 count++;
             }
         }
-        
-        // Create compact array
-        Book[] result = new Book[count];
+
+        Book[] filteredBooks = new Book[count];
         int index = 0;
+
         for (Book book : books) {
             if (book != null && book.getPrice() <= maxPrice) {
-                result[index++] = book;
+                filteredBooks[index++] = book;
             }
         }
-        
-        return result;
+
+        return filteredBooks;
     }
-    
-    /**
-     * Filters books published in a specific decade.
-     * For example, decade 1990 includes years 1990-1999.
-     * 
-     * @param books array of books (may be null or contain nulls)
-     * @param decade the decade start year (e.g., 1990, 2000)
-     * @return compact array of books from that decade
-     */
-    public static Book[] filterByDecade(Book[] books, int decade) {
+
+    static Book[] filterByDecade(Book[] books, int decade) {
         if (books == null) {
             return new Book[0];
         }
-        
-        int decadeEnd = decade + 9;
-        
-        // Count matching books
+
+        int decadeEnd = decade + 10;
         int count = 0;
+
         for (Book book : books) {
-            if (book != null && book.getYear() >= decade && book.getYear() <= decadeEnd) {
+            if (book != null && book.getYear() >= decade && book.getYear() < decadeEnd) {
                 count++;
             }
         }
-        
-        // Create compact array
-        Book[] result = new Book[count];
+
+        Book[] filteredBooks = new Book[count];
         int index = 0;
+
         for (Book book : books) {
-            if (book != null && book.getYear() >= decade && book.getYear() <= decadeEnd) {
-                result[index++] = book;
+            if (book != null && book.getYear() >= decade && book.getYear() < decadeEnd) {
+                filteredBooks[index++] = book;
             }
         }
-        
-        return result;
+
+        return filteredBooks;
     }
-    
-    /**
-     * Sorts books by price in ascending order (in-place).
-     * Nulls are moved to the end.
-     * 
-     * @param books array to sort (modified in-place)
-     */
+
+    // sorting Operations
     public static void sortByPrice(Book[] books) {
         if (books == null || books.length <= 1) {
             return;
-        }
-        
-        Arrays.sort(books, (a, b) -> {
-            if (a == null && b == null) return 0;
-            if (a == null) return 1;
-            if (b == null) return -1;
-            return Double.compare(a.getPrice(), b.getPrice());
+    }
+
+        Arrays.sort(books, (book1, book2) -> {
+            if (book1 == null && book2 == null) return 0;
+            if (book1 == null) return 1;
+            if (book2 == null) return -1;
+            return Double.compare(book1.getPrice(), book2.getPrice());
         });
     }
-    
-    /**
-     * Sorts books by year in ascending order (in-place).
-     * Nulls are moved to the end.
-     * 
-     * @param books array to sort (modified in-place)
-     */
+
     public static void sortByYear(Book[] books) {
-        if (books == null || books.length <= 1) {
-            return;
-        }
-        
-        Arrays.sort(books, (a, b) -> {
-            if (a == null && b == null) return 0;
-            if (a == null) return 1;
-            if (b == null) return -1;
-            return Integer.compare(a.getYear(), b.getYear());
+        Arrays.sort(books, (book1, book2) -> {
+            if (book1 == null && book2 == null) return 0;
+            if (book1 == null) return 1;
+            if (book2 == null) return -1;
+            return Integer.compare(book1.getYear(), book2.getYear());
         });
     }
-    
-    /**
-     * Calculates the average price of books in the array.
-     * 
-     * @param books array of books (may be null or contain nulls)
-     * @return average price, or 0.0 if array is null or empty
-     */
+
+    // Statistics
     public static double averagePrice(Book[] books) {
+
+        //checks for null input
         if (books == null) {
             return 0.0;
         }
-        
-        double sum = 0.0;
+
+        double sum = 0;
         int count = 0;
-        
         for (Book book : books) {
+            //Passes null books
             if (book != null) {
                 sum += book.getPrice();
                 count++;
             }
         }
-        
-        return count == 0 ? 0.0 : sum / count;
+        if (count == 0) {
+            return 0.0;
+        }
+        return sum / count;
     }
-    
-    /**
-     * Finds the oldest book (earliest publication year).
-     * 
-     * @param books array of books (may be null or contain nulls)
-     * @return the oldest book, or null if array is null/empty
-     */
+
     public static Book findOldest(Book[] books) {
+        //checks for null input
         if (books == null) {
             return null;
         }
-        
-        Book oldest = null;
+        Book oldestBook = null;
         for (Book book : books) {
+            //Passes null books
             if (book != null) {
-                if (oldest == null || book.getYear() < oldest.getYear()) {
-                    oldest = book;
+                if (oldestBook == null || book.getYear() < oldestBook.getYear()) {
+                    oldestBook = book;
                 }
             }
         }
-        
-        return oldest;
+        return oldestBook;
     }
-    
-    /**
-     * Merges two book arrays into one, preserving all elements.
-     * 
-     * @param arr1 first array (may be null)
-     * @param arr2 second array (may be null)
-     * @return merged array containing all books from both arrays
-     */
+
+    // Array Manipulation
     public static Book[] merge(Book[] arr1, Book[] arr2) {
-        int len1 = (arr1 == null) ? 0 : arr1.length;
-        int len2 = (arr2 == null) ? 0 : arr2.length;
-        
-        Book[] result = new Book[len1 + len2];
-        
+        int arr1Length;
+        int arr2Length;
+
+        if (arr1 == null) {
+            arr1Length = 0;
+        } else {
+            arr1Length = arr1.length;
+        }
+
+        if (arr2 == null) {
+            arr2Length = 0;
+        } else {
+            arr2Length = arr2.length;
+        }
+
+        Book[] merged = new Book[arr1Length + arr2Length];
         if (arr1 != null) {
-            System.arraycopy(arr1, 0, result, 0, len1);
+            System.arraycopy(arr1, 0, merged, 0, arr1Length);
         }
         if (arr2 != null) {
-            System.arraycopy(arr2, 0, result, len1, len2);
+            System.arraycopy(arr2, 0, merged, arr1Length, arr2Length);
         }
-        
-        return result;
+        return merged;
     }
-    
-    /**
-     * Removes duplicate books based on ISBN.
-     * Returns a compact array with unique books only.
-     * 
-     * @param books array of books (may be null or contain nulls)
-     * @return compact array with duplicates removed
-     */
+
     public static Book[] removeDuplicates(Book[] books) {
+        ArrayList<Book> noDuplicates = new ArrayList<>();
+        Set<String> isbnsSaved = new HashSet<>();
+
         if (books == null) {
             return new Book[0];
         }
-        
-        Set<String> seenIsbns = new HashSet<>();
-        List<Book> unique = new ArrayList<>();
-        
+
         for (Book book : books) {
-            if (book != null && seenIsbns.add(book.getIsbn())) {
-                unique.add(book);
+            if (book != null && isbnsSaved.add(book.getIsbn())) {
+                noDuplicates.add(book);
             }
         }
-        
-        return unique.toArray(new Book[0]);
+
+        return noDuplicates.toArray(new Book[0]);
+
     }
-    
     /**
      * Finds books within a year range (inclusive).
      * 

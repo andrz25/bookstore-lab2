@@ -21,18 +21,42 @@ import com.university.bookstore.model.VideoMaterial;
 
 public interface MaterialVisitor {
 
-    
+    /**
+     * Visits a printed book
+     * @param book the book that will be added
+     */
+
     //visits a printed book
     void visit(PrintedBook book);
+
+    /**
+     * Visits a magazine
+     * @param book the book that will be added
+     */
 
     //visits a magazine
     void visit(Magazine magazine);
 
+    /**
+     * Visits an audio book
+     * @param book the book that will be added
+     */
+
     //visits an audio book
     void visit(AudioBook audioBook);
 
+    /**
+     * Visits a video
+     * @param book the book that will be added
+     */
+
     //visits a video
     void visit(VideoMaterial video);
+
+    /**
+     * Visits an ebook
+     * @param book the book that will be added
+     */
 
     //visits an ebook
     void visit(EBook ebook);

@@ -9,6 +9,18 @@ import com.university.bookstore.model.PrintedBook;
 import com.university.bookstore.model.VideoMaterial;
 
 /**
+ * Interface defining operations for a polymorphic material store.
+ * Demonstrates interface segregation and dependency inversion principles.
+ * 
+ * <p>This interface extends the concept of a bookstore to handle
+ * various types of materials using polymorphism.</p>
+ * 
+ * @author Jayna Ong and Nina Zhang
+ * @version 1.0
+ * @since 2025-10-01
+ */
+
+/**
  * Visitor implementation for calculating shipping costs.
  * Demonstrates the Visitor pattern by providing different shipping
  * cost calculations based on material type.

@@ -18,8 +18,10 @@ import com.university.bookstore.model.VideoMaterial;
  * @version 1.0
  * @since 2025-10-01
  */
+
 public interface MaterialVisitor {
 
+    
     //visits a printed book
     void visit(PrintedBook book);
 

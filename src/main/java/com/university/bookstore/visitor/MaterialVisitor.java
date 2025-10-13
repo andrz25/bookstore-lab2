@@ -23,42 +23,37 @@ public interface MaterialVisitor {
 
     /**
      * Visits a printed book
-     * @param book the book that will be added
+     * @param book the printed book that will be visited
      */
 
-    //visits a printed book
     void visit(PrintedBook book);
 
     /**
      * Visits a magazine
-     * @param book the book that will be added
+     * @param magazine the magazine that will be visited
      */
 
-    //visits a magazine
     void visit(Magazine magazine);
 
     /**
      * Visits an audio book
-     * @param book the book that will be added
+     * @param audioBook the audio book that will be visited
      */
 
-    //visits an audio book
     void visit(AudioBook audioBook);
 
     /**
      * Visits a video
-     * @param book the book that will be added
+     * @param video the video that will be visited
      */
 
-    //visits a video
     void visit(VideoMaterial video);
 
     /**
      * Visits an ebook
-     * @param book the book that will be added
+     * @param ebook the ebook that will be visited
      */
 
-    //visits an ebook
     void visit(EBook ebook);
  
 }

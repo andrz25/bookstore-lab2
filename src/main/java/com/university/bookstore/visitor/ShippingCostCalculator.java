@@ -9,18 +9,6 @@ import com.university.bookstore.model.PrintedBook;
 import com.university.bookstore.model.VideoMaterial;
 
 /**
- * Interface defining operations for a polymorphic material store.
- * Demonstrates interface segregation and dependency inversion principles.
- * 
- * <p>This interface extends the concept of a bookstore to handle
- * various types of materials using polymorphism.</p>
- * 
- * @author Jayna Ong and Nina Zhang
- * @version 1.0
- * @since 2025-10-01
- */
-
-/**
  * Visitor implementation for calculating shipping costs.
  * Demonstrates the Visitor pattern by providing different shipping
  * cost calculations based on material type.
@@ -30,6 +18,9 @@ import com.university.bookstore.model.VideoMaterial;
  * - Digital items: $0 (instant download)
  * - Magazines: $2 flat rate</p>
  * 
+ * @author Jayna Ong and Nina Zhang
+ * @version 1.0
+ * @since 2025-10-01
  */
 
 
@@ -86,15 +77,29 @@ import com.university.bookstore.model.VideoMaterial;
         totalShippingCost += DIGITAL_ITEM_RATE;
     }
 
+    /**
+     * Returns total shipping cost of items
+     * @return total shipping cost
+     */
+
     public double getShippingCost() {
         return totalShippingCost;
     }
+
+    /**
+     * Resets total shipping cost to 0
+     */
 
     public void reset() {
         totalShippingCost = 0.0;
     }
 
-    public double calcualteShippingCost(Material material) {
+    /**
+     * Calculates total shipping cost of items according to what the material is
+     * @param material the material price that is being calculated
+     * @return the total shipping price
+     */
+    public double calculateShippingCost(Material material) {
         reset();
 
         if (material instanceof PrintedBook) {

@@ -25,7 +25,7 @@ public interface Media {
      * 
      * @return format string (e.g., "MP3", "MP4", "WAV")
      */
-    String getFormat();
+    String getFileFormat();
     
     /**
      * Gets the file size in megabytes.
@@ -55,7 +55,7 @@ public interface Media {
      */
     default String getPlaybackInfo() {
         return String.format("Duration: %d min, Format: %s, Quality: %s, Size: %.1f MB",
-            getDuration(), getFormat(), getQuality(), getFileSize());
+            getDuration(), getFileFormat(), getQuality(), getFileSize());
     }
     
     /**

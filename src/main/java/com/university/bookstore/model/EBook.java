@@ -89,7 +89,7 @@ public class EBook extends Material implements Media {
     return 0;
   }
 
-  public String getFormat() {
+  public String getFileFormat() {
     return fileFormat;
   }
 

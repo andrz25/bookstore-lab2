@@ -82,7 +82,7 @@ import com.university.bookstore.model.VideoMaterial;
      * @return total shipping cost
      */
 
-    public double getShippingCost() {
+    public double getTotalShippingCost() {
         return totalShippingCost;
     }
 

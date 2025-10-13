@@ -100,7 +100,7 @@ public class AudioBook extends Material implements Media {
     }
     
     @Override
-    public String getFormat() {
+    public String getFileFormat() {
         return format;
     }
     

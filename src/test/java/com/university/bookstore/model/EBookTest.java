@@ -35,7 +35,7 @@ class EBookTest {
     assertNotNull(validEBook);
     assertEquals("Effective Java", validEBook.getTitle());
     assertEquals("Joshua Bloch", validEBook.getCreator());
-    assertEquals("EPUB", validEBook.getFormat());
+    assertEquals("EPUB", validEBook.getFileFormat());
     assertEquals(2.5, validEBook.getFileSize(), 0.001);
     assertTrue(validEBook.isDrmEnabled());
     assertEquals(90000, validEBook.getWordCount());

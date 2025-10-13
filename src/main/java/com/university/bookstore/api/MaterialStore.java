@@ -93,7 +93,7 @@ public interface MaterialStore {
      * @throws IllegalArgumentException if years is a negative value
      */
     
-    List<Material> findMostRecentMaterials(int years);
+    List<Material> findRecentMaterials(int years);
 
     /**
      * Find materials by multiple creators or condition

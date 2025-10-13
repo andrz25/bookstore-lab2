@@ -116,7 +116,7 @@ public class VideoMaterial extends Material implements Media {
     }
     
     @Override
-    public String getFormat() {
+    public String getFileFormat() {
         return format;
     }
     

@@ -503,7 +503,7 @@ public class PolymorphismDemo {
                 System.out.println("    Director: " + video.getDirector());
                 System.out.println("    Duration: " + video.getDuration() + " minutes");
                 System.out.println("    Quality: " + video.getQuality());
-                System.out.println("    Format: " + video.getFormat());
+                System.out.println("    Format: " + video.getFileFormat());
                 System.out.println("    Rating: " + video.getRating());
                 System.out.println("    Aspect Ratio: " + video.getAspectRatio());
                 System.out.println("    Subtitles: " + (video.hasSubtitles() ? "Yes" : "No"));
@@ -524,7 +524,7 @@ public class PolymorphismDemo {
             AudioBook audio = (AudioBook) material;
             System.out.println("\n  " + audio.getTitle());
             System.out.println("    Quality: " + audio.getQuality());
-            System.out.println("    Format: " + audio.getFormat());
+            System.out.println("    Format: " + audio.getFileFormat());
             System.out.println("    File Size: " + audio.getFileSize() + " MB");
             System.out.println("    Duration: " + audio.getDuration() + " minutes");
             double estimatedBitrate = (audio.getFileSize() * 8 * 1024) / (audio.getDuration() * 60);

@@ -139,7 +139,7 @@ public class MaterialStoreImplTest {
         
         for (Media media : mediaItems) {
             assertTrue(media.getDuration() > 0);
-            assertNotNull(media.getFormat());
+            assertNotNull(media.getFileFormat());
         }
     }
     

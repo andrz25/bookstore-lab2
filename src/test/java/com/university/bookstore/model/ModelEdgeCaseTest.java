@@ -191,7 +191,7 @@ class ModelEdgeCaseTest {
         assertEquals(0.01, minAudioBook.getPrice());
         assertEquals(1900, minAudioBook.getYear());
         assertEquals(1, minAudioBook.getDuration());
-        assertEquals("D", minAudioBook.getFormat());
+        assertEquals("D", minAudioBook.getFileFormat());
         assertEquals(0.1, minAudioBook.getFileSize());
         assertEquals(Media.MediaQuality.LOW, minAudioBook.getQuality());
         assertEquals("E", minAudioBook.getLanguage());
@@ -200,7 +200,7 @@ class ModelEdgeCaseTest {
         
         // Test Media interface methods
         assertTrue(minAudioBook.getDuration() > 0);
-        assertNotNull(minAudioBook.getFormat());
+        assertNotNull(minAudioBook.getFileFormat());
         assertTrue(minAudioBook.getFileSize() > 0);
         assertNotNull(minAudioBook.getQuality());
         assertFalse(minAudioBook.isStreamingOnly());
@@ -223,7 +223,7 @@ class ModelEdgeCaseTest {
         assertEquals(0.01, minVideo.getPrice());
         assertEquals(1900, minVideo.getYear());
         assertEquals(1, minVideo.getDuration());
-        assertEquals("C", minVideo.getFormat());
+        assertEquals("C", minVideo.getFileFormat());
         assertEquals(0.1, minVideo.getFileSize());
         assertEquals(Media.MediaQuality.LOW, minVideo.getQuality());
         assertEquals(VideoMaterial.VideoType.SHORT_FILM, minVideo.getVideoType());
@@ -235,7 +235,7 @@ class ModelEdgeCaseTest {
         
         // Test Media interface methods
         assertTrue(minVideo.getDuration() > 0);
-        assertNotNull(minVideo.getFormat());
+        assertNotNull(minVideo.getFileFormat());
         assertTrue(minVideo.getFileSize() > 0);
         assertNotNull(minVideo.getQuality());
         assertFalse(minVideo.isStreamingOnly());
@@ -268,7 +268,7 @@ class ModelEdgeCaseTest {
         
         // Test Media interface methods
         assertTrue(minEBook.getDuration() >= 0);
-        assertNotNull(minEBook.getFormat());
+        assertNotNull(minEBook.getFileFormat());
         assertTrue(minEBook.getFileSize() > 0);
         assertNotNull(minEBook.getQuality());
         assertFalse(minEBook.isStreamingOnly());

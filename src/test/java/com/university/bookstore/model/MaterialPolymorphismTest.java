@@ -71,7 +71,7 @@ public class MaterialPolymorphismTest {
         
         for (Media media : mediaItems) {
             assertTrue(media.getDuration() > 0);
-            assertNotNull(media.getFormat());
+            assertNotNull(media.getFileFormat());
             assertTrue(media.getFileSize() > 0);
             assertNotNull(media.getQuality());
             assertNotNull(media.getPlaybackInfo());

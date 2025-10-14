@@ -31,7 +31,7 @@ public interface MaterialStore {
     /**
      * Removes material by unique id
      * @param id the id that will be used to remove materials
-     * @return material object if it was removed, an empty optional if not
+     * @return material object if it was removed, and Optional.empty() if not
      * @throws NullPointerException is thrown if material is null
      */
     
@@ -40,7 +40,7 @@ public interface MaterialStore {
     /**
      * Finds material by unique id
      * @param id the id that will be used to find materials
-     * @return material object if it was found, an empty optional if not
+     * @return material object if it was found, an Optional.empty() if not
      */
     
     Optional<Material> findById(String id);
@@ -88,8 +88,8 @@ public interface MaterialStore {
     
     /**
      * Find materials published in last n years
-     * @param years the year the materials need to be
-     * @return a list of materials that are the same as the given year
+     * @param years the number of years to look back
+     * @return a list of recent materials 
      * @throws IllegalArgumentException if years is a negative value
      */
     
@@ -134,7 +134,6 @@ public interface MaterialStore {
      * Gets materials published/released in a certain year
      * @param year the year the required materials should be
      * @return list of materials that match the given year
-     * @throws IllegalArgumentException is thrown if minPrice or maxPrice is less than zero, or minPrice is larger than maxPrice
      */
 
     List<Material> getMaterialsByYear(int year);

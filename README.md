@@ -939,24 +939,36 @@ Create a 20-minute video reflection covering:
 Answer these reflection questions thoughtfully:
 
 1. **Abstraction Understanding**: How does the abstract `Material` class enforce a contract for its subclasses? What would happen if we made `Material` a concrete class instead?
+- The abstract Material class enforces a contract for its subclasses by adding abstract methods without implementations, that their subclasses will be forced to implement. This ensures each of the subclasses implement specific behaviors that would be consistent with the other classes. If Material was made into a concrete class instead then all of its methods would have a defined body and would have already been implemented. This means that all of its subclasses would have to follow the exact same implementation unlike abstract classes where we would be able to have different implementations in different subclasses.
 
 2. **Polymorphism in Practice**: Describe a real-world scenario where you would use polymorphism similar to this bookstore system. How would it improve code maintainability?
+- Polymorphism allows it so we can reuse the same code in many different ways, especially code that may be needed for many different objects. It improves code readability by allowing users to reuse methods instead of having to create more for each object. It makes the code easier to manage and debug if you have one single method rather than multiple that do essentially the same thing.
 
 3. **Interface Design**: Why is the `Media` interface valuable even though `AudioBook` and `VideoMaterial` already extend `Material`? What principle does this demonstrate?
+- The Media interface is valuable because unlike PrintedBook and Magazine, AudioBook and VideoMaterial are online resources, meaning that there could be more factors that affect those two objects that don’t affect the others. Having the Media interface allows it so these two objects can implement more methods and variables while following a similar structure and not affecting the other objects.
+- This demonstrates the Interface Segregation Principle where clients shouldn’t be forced to depend on interfaces they don’t use. In this case PrintedBook and Magazine wouldn’t use Media because they are physical books, while VideoMaterial and AudioBook would use Media because they are not physical items. 
 
 4. **Defensive Programming**: Identify three defensive programming techniques used in the codebase. How do they prevent bugs and improve reliability?
+- 
 
 5. **Testing Strategy**: Why is it important to test both valid and invalid inputs? Give an example of a boundary condition test from the codebase.
+- It is important to test both valid and invalid inputs to make sure that your code runs more smoothly. If you only test valid inputs there is a chance that invalid inputs may pass the tests and cause an error somewhere along the way. Similarly if you only test invalid inputs you wouldn’t know if the valid inputs actually work the way they are intended to, which is why it is important to have both valid and invalid inputs when testing the code. It allows it so we can catch any bugs or errors that we may not have noticed within the code.
+- 
 
 6. **Design Patterns**: Which design pattern from the lab do you find most useful? How would you apply it in your own projects?
+- 
 
 7. **Performance Considerations**: What are the performance implications of using `ArrayList` vs `HashMap` for the bookstore? When would you choose each?
+- 
 
 8. **SOLID Principles**: Which SOLID principle do you think is most important for maintainable code? Provide an example from your implementation.
+- 
 
 9. **Code Quality**: What makes code "clean"? Identify three characteristics of clean code demonstrated in this lab.
+- 
 
 10. **Learning Reflection**: What was the most challenging concept in this lab? How did you overcome the challenge, and what resources did you use?
+- 
 
 
 ### Quick Access Commands

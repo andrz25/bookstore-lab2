@@ -194,4 +194,72 @@ class EBookTest {
     assertThrows(IllegalArgumentException.class, () -> new EBook("978-0134685991", "Test Book", "Test Author",
         45.99, 2018, "PDF", Double.POSITIVE_INFINITY, false, 50000, MediaQuality.HIGH));
   }
+
+   /**
+   * Performance comparison test.
+   * Measures add and search times for 10,000 EBooks using ArrayList vs HashMap.
+   */
+  @Test
+  void performanceComparison() {
+    System.out.println("\n--- Performance Comparison Test ---");
+
+    // ArrayList-based storage simulation
+    MaterialStore arrayStore = new MaterialStoreImpl();
+    long startTime = System.nanoTime();
+    for (int i = 0; i < 10000; i++) {
+      EBook eBook = new EBook(
+          "ID-" + i,
+          "Book " + i,
+          "Author " + i,
+          9.99,
+          2020,
+          "PDF",
+          2.0,
+          false,
+          50000,
+          MediaQuality.HIGH);
+      arrayStore.addMaterial(eBook);
+    }
+    long addArrayTime = System.nanoTime() - startTime;
+
+    startTime = System.nanoTime();
+    Material foundArray = arrayStore.findById("ID-5000");
+    long searchArrayTime = System.nanoTime() - startTime;
+
+    System.out.println("ArrayList Add 10K: " + (addArrayTime / 1_000_000.0) + " ms");
+    System.out.println("ArrayList Search: " + (searchArrayTime / 1_000_000.0) + " ms");
+
+    // HashMap-based storage simulation (if implemented)
+    if (MaterialStoreHashMapImpl.isAvailable()) {
+      MaterialStore hashStore = new MaterialStoreHashMapImpl();
+
+      startTime = System.nanoTime();
+      for (int i = 0; i < 10000; i++) {
+        EBook eBook = new EBook(
+            "ID-" + i,
+            "Book " + i,
+            "Author " + i,
+            9.99,
+            2020,
+            "PDF",
+            2.0,
+            false,
+            50000,
+            MediaQuality.HIGH);
+        hashStore.addMaterial(eBook);
+      }
+      long addHashTime = System.nanoTime() - startTime;
+
+      startTime = System.nanoTime();
+      Material foundHash = hashStore.findById("ID-5000");
+      long searchHashTime = System.nanoTime() - startTime;
+
+      System.out.println("HashMap Add 10K: " + (addHashTime / 1_000_000.0) + " ms");
+      System.out.println("HashMap Search: " + (searchHashTime / 1_000_000.0) + " ms");
+    } else {
+      System.out.println("HashMap implementation not available — skipping.");
+    }
+
+    System.out.println("--- End of Performance Comparison ---\n");
+  }
 }

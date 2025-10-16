@@ -934,6 +934,52 @@ Create a 20-minute video reflection covering:
 4. **Immutability**: Discuss benefits in domain models
 5. **Performance**: Compare ArrayList vs ConcurrentHashMap trade-offs and thread safety
 
+### Code Exploration and Analysis
+
+1. How many concrete classes extend the abstract Material class?
+- The five concrete classes that extend the abstract Material class are AudioBook, EBook, Magazine, PrintedBook, and VideoMaterial.
+2. What design pattern is demonstrated in the getDiscountedPrice() method?
+- Inside the getDiscountedPrice() method, the design pattern demonstrated is the Template method. The template method is a design pattern where it creates the structure of an algorithm, which then allows other subclasses to override certain steps, while maintaining the same algorithm.. For example, the getDiscountedPrice() method is able to use the getDiscountRate() method as it desires, while the overall behavior of getDiscountedPrice() stays the same. The getDiscountRate() method is the step that can be used by other subclasses or the “step” that is being overridden.
+3. List all interfaces implemented in the system and their purposes.
+- BookstoreAPI: An interface that provides the basic methods to operate a bookstore, and defines CRUD, search, analytic, and export operations
+- MaterialStore: An interface that helps establish operations of a polymorphic material store
+- Media: An interface that helps materials like audio and video materials define their function (ex. Duration, format, and playback)
+- MaterialVisitor: Allows for multiple classes to implement the same method names with different implementation details
+- Comparable<Material>: Helps order all materials in alphabetical order using titles
+4. Identify three examples of defensive programming in the Book class.
+- Input validation in a constructor -> helps prevent any errors for a given input, instead of automatically assigning and assuming the given input is correct
+- ISBN validation -> helps prevent wrong formatting of the ISBN, in case the given ISBN is a NULL value, and if it only contains digits from 0-9
+- Price validation -> helps prevent invalid prices by checking if the price is a negative value, or any invalid math equations (infinite, or invalid calculations)
+- Conclusion: Each one of these examples help prevent invalid input
+5. What is the worst case time complexity of finding a book by ISBN in BookstoreArrayList?
+- The worst case time complexity is O(n) where the given isbn is valid but it does not exist within the inventory, meaning that the code has to iterate through the entire list only to return back NULL.
+
+### UML Generation and Analysis
+1. Identify all aggregation and composition relationships
+- Composition: Section A relies on Section B to exist. If Section B gets destroyed, Section A gets destroyed alongside it, since it can’t function without Section B. In essence, Section A can’t be independent, but is dependent on Section B.
+    - Example: MaterialStoreImpl and List<Material>
+        - The store (MaterialStoreImpl) has to exist in order for materials (List<Material>) to exist
+- Aggregation: Section A can rely on Section B to exist, but it doesn’t have to. If Section B gets destroyed, Section A can still function without Section B. In essence, Section A can be independent of Section B.
+    - Example: BookstoreArrayList and List<Book>
+        - The bookstore (BookstoreArrayList) does not need to exist in order for books (List<Book>) to exist
+2. Explain why Media is an interface rather than a class
+- Media is an interface instead of a class because multiple different classes require Media to set its behaviour. In other words, Media is like a contract for all classes, as it helps classes create different implementation needs, and media types desired. At the same time, it helps practice the Interface Segregation Policy (A SOLID Principle), since Media and Material are separate from each other. This allows classes to only implement interfaces that are needed, instead of implementing ones that are not necessary, if Media and Material weren’t separated.
+
+### Solid Principle Analysis
+
+For each SOLID principle, provide:
+1. Single Responsibility: One example from the codebase
+- Single Responsibility essentially means that a class only should have one reason to change, and it should only have one job in general. An example would be the BookArrayUtils class, since the only purpose of the class is to provide util use for Book objects. The only reason it would need to change, would all be based on how the Book objects function, and what utils they require from the class.
+2. Open/Closed: How does the Material hierarchy demonstrate this?
+- Material is an abstract class that implements the Comparable<Material>. The subclasses of material can use polymorphism to implement any of the abstract methods in the Material class, but the subclasses cannot edit any of the methods within the Material class.(You can’t make modifications to Material class)
+3. Liskov Substitution: An example of proper substitution
+- Liskov Substitution means that subclasses should be able to substitute for their base type without changing the functionality of the base type. An example could be Material, meaning any Material subclass should be able to substitute in for the Material type, without breaking or changing functionality. In essence, we can use EBook (a material subclass) in place of where Material is needed or called.
+4. Interface Segregation: Why is Media separate from Material?
+- Media is separate from Material because the methods stored in Media are not needed by all subclasses, only AudioBook and VideoMaterial. The other subclasses shouldn't be forced to depend on interfaces/methods that don’t apply to them.
+5. Dependency Inversion: How does the API layer demonstrate this?
+- This means that it is not the actual implementation that is depended on, but the declaration of the method(method lines). In the API layer there are no code bodies for each of the declared methods, there are only the method lines in the interfaces.
+
+
 ### Reflection Questions
 
 Answer these reflection questions thoughtfully:
@@ -949,26 +995,51 @@ Answer these reflection questions thoughtfully:
 - This demonstrates the Interface Segregation Principle where clients shouldn’t be forced to depend on interfaces they don’t use. In this case PrintedBook and Magazine wouldn’t use Media because they are physical books, while VideoMaterial and AudioBook would use Media because they are not physical items. 
 
 4. **Defensive Programming**: Identify three defensive programming techniques used in the codebase. How do they prevent bugs and improve reliability?
-- 
+- Defensive Programming is where we prepare for situations where errors can occur, and where code checking and prevention is done. Within the codebase, there are many different examples of defensive programming shown. 
+    - EBook Constructor: There are validations being run inside the EBook constructor, instead of assuming that the given input is correct. For each of the fields, they run specific method lines that are there for input checking. 
+    - Magazine ValidateIssn: Inside there, we can see how it checks for NULL input, and if it is properly formatted by checking if the ISSN is only 8 characters. In addition, it also helps remove unnecessary characters meaning input such as “1111 1111” can be valid input.
+    - VideoMaterial ValidateFileSize: It helps check if the file size is a valid input, meaning it can’t be a negative number. It then throws an IllegalArgumentException, which allows us to identify the specific issue we are occurring.
+- Conclusion: Each example helps prevent bugs, and improve reliability since it helps the code run smoothly, even if such issues occur. If an issue were to occur, a proper written error message would be given, which directly tells us what the problem is with our code. Having such defensive programming techniques allow us to further protect our code from errors, which is especially important when it comes to bigger portions of code.
+
 
 5. **Testing Strategy**: Why is it important to test both valid and invalid inputs? Give an example of a boundary condition test from the codebase.
 - It is important to test both valid and invalid inputs to make sure that your code runs more smoothly. If you only test valid inputs there is a chance that invalid inputs may pass the tests and cause an error somewhere along the way. Similarly if you only test invalid inputs you wouldn’t know if the valid inputs actually work the way they are intended to, which is why it is important to have both valid and invalid inputs when testing the code. It allows it so we can catch any bugs or errors that we may not have noticed within the code.
-- 
+@Test
+    @Order(8)
+    @DisplayName("Should reject negative max price")
+    void testFilterPriceAtMostNegative() {
+        assertThrows(IllegalArgumentException.class,
+            () -> BookArrayUtils.filterPriceAtMost(books, -1.0));
+    }
+- In this example, we can see that the test case checks for a negative input, where we use -1.0 as our testing input. Since we can’t have a value below 0, this test checks for input values lower than 0, then ensuring an IllegalArgumentException is thrown. This test case helps ensure that input values less than 0 will be properly dealt with in the code. Overall, this is an example of a boundary condition test since we know that the value of maxPrice can not be a negative value.
 
 6. **Design Patterns**: Which design pattern from the lab do you find most useful? How would you apply it in your own projects?
-- 
+- Out of all design patterns we found the factory design pattern to be most useful because of how it allows multiple objects to follow one interface, but all have different implementations. In our own projects we can use this design pattern in situations where we have multiple objects that follow a similar pattern, but essentially have different implementations. For example, we could have an animal interface, and have multiple different animal objects implementing the interface like dog, bear, chicken, etc. There could be a method makeNoise, and while all animals make noise, they all have different sounds, so implementing the method for each object would be different, but they would still follow the same pattern.
 
 7. **Performance Considerations**: What are the performance implications of using `ArrayList` vs `HashMap` for the bookstore? When would you choose each?
-- 
+- An arrayList would be a better option if you want an ordered version of your items. At the same time, we can use it to find where specific items are within the arrayList, by getting the index of the item. Memory wise, an arrayList would be a better option since it only uses a contiguous chunk of memory.
+- For things like addition, deletion or search, a HashMap would be a better choice. Since hashMaps use a key-value pair, it makes it easier to go through all the items, and do the necessary operations desired. Different from an arrayList, it does not need to iterate through all items, to find the specific one we need.
+
 
 8. **SOLID Principles**: Which SOLID principle do you think is most important for maintainable code? Provide an example from your implementation.
-- 
+- Out of all the SOLID principles we think that the Single Responsibility Principle(SRP) is the most important for maintaining code. The Single Responsibility Principle helps us maintain and create flexibility, and talks about how a class should only change for one reason. By implementing this principle, we can ensure that code is being organized in a manner where no logic is being mixed amongst one another. At the same time, any occurrence of errors would only be targeted towards a specific logic of the code, ensuring that other sections remain unaffected. In the end, the appearance of errors would greatly decline compared to code where logic is mixed together.
+    - For example, we have our ShippingCalculateCost class where all and only material shipping prices are calculated. In addition, we have our Material class where all the properties and information of all materials is being held. This is an example of the principle, since it shows how the logic behind cost calculating, and material information are separate amongst each other. By doing so, it ensures that each of those classes have only one purpose, making it easier to read and test code.
+
 
 9. **Code Quality**: What makes code "clean"? Identify three characteristics of clean code demonstrated in this lab.
-- 
+- Consistent/Similar Structure across multiple files
+    - Removal of unnecessary and/or repetitive code across multiple files
+- Same naming conventions 
+    - Easy to read/understand comments that don’t over explain every method
+- Maintainability
+    - Clean code makes it easy to maintain, refactor, or debug.
+    - Adding or removing new features is easy, and ensures minimal friction between existing implementations and features.
+- Don’t Repeat Yourself (D.R.Y)
+    - Ensures code reusability through the use of functions, classes, and objects.
+
 
 10. **Learning Reflection**: What was the most challenging concept in this lab? How did you overcome the challenge, and what resources did you use?
-- 
+- The most challenging concept to understand was the multiple design patterns that were discussed and implemented in this lab. During the lab, it took more effort and time to go over each of the design patterns to fully understand the purpose of each. When going through and reading the different design patterns we could have implemented it was hard to make a choice as we were familiar with none of the patterns. In addition, when implementing the two files for the visitor pattern it was difficult to understand what the design pattern actually was. For example, we went over patterns such as the template, and factory pattern as a group by looking at additional resources to further enhance our understanding.
 
 
 ### Quick Access Commands

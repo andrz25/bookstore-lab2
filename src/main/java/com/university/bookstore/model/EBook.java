@@ -26,6 +26,20 @@ public class EBook extends Material implements Media {
   private final int wordCount;
   private final MediaQuality quality;
 
+  /**
+   * Constructs an EBook instance with the specified attributes.
+   * 
+   * @param id         Unique identifier for the e-book.
+   * @param title      Title of the e-book.
+   * @param author     Author of the e-book.
+   * @param price      Price of the e-book.
+   * @param year       Publication year of the e-book.
+   * @param fileFormat File format of the e-book (e.g., PDF, EPUB)
+   * @param fileSize   Size of the e-book file in megabytes (MB).
+   * @param drmEnabled Indicates if DRM protection is enabled.
+   * @param wordCount  Total word count of the e-book.
+   * @param quality    Quality of the media (e.g., STANDARD, HIGH).
+   */
   public EBook(String id, String title, String author, double price, int year, String fileFormat, double fileSize,
       boolean drmEnabled, int wordCount, MediaQuality quality) {
     super(id, title, price, year, MaterialType.E_BOOK);
